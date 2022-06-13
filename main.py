@@ -1,17 +1,16 @@
 def parse(query: str) -> dict:
     parse_url = {}
-    if "?" not in query:
-        return parse_url
-    params = query.split("?", 1)[-1]
-    if "&" in params:
-        for i in params.split("&"):
-            if i and "=" in i and i.split("=", 1)[0]:
-                parse_url[i.split('=', 1)[0]] = i.split('=', 1)[1]
-    else:
-        if "=" in params:
-            params.split("=", 1)
-            if params.split("=", 1)[0] and params.split("=", 1)[1]:
-                parse_url[params.split('=', 1)[0]] = params.split("=", 1)[1]
+    if "?" in query:
+        params = query.split("?", 1)[-1]
+        if "&" in params:
+            for i in params.split("&"):
+                if i and "=" in i and i.split("=", 1)[0]:
+                    parse_url[i.split('=', 1)[0]] = i.split('=', 1)[1]
+        else:
+            if "=" in params:
+                params.split("=", 1)
+                if params.split("=", 1)[0] and params.split("=", 1)[1]:
+                    parse_url[params.split('=', 1)[0]] = params.split("=", 1)[1]
     return parse_url
 
 
