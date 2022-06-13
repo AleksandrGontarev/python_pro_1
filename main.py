@@ -41,41 +41,37 @@ if __name__ == '__main__':
                                                                                               }
 
 
-# def parse_cookie(query: str) -> dict:
-#     cookie = {}
-#     if "name=" in query:
-#         name = query.split('=', 1)[1]
-#         if ';age=' in name:
-#             name = name.split(';age=')[0]
-#         elif ';' in name:
-#             name = name.rsplit(';', 1)
-#         if name:
-#             cookie['name'] = ''.join(name)
-#     if ";age=" in query:
-#         age = query.split(';age=')[1].rsplit(';', 1)[0]
-#         if age:
-#             cookie['age'] = ''.join(age)
-#     elif "age=" in query:
-#         age = query.split('age=')[1].split(';')[0]
-#         if age:
-#             if age[0] != 'name=':
-#                 cookie['age'] = age
-#     return cookie
-#
-#
-# if __name__ == '__main__':
-#     assert parse_cookie('name=Dima;') == {'name': 'Dima'}
-#     assert parse_cookie('') == {}
-#     assert parse_cookie('name=Dima;age=28;') == {'name': 'Dima', 'age': '28'}
-#     assert parse_cookie('name=Dima=User;age=28;') == {'name': 'Dima=User', 'age': '28'}
-#     assert parse_cookie('name=Dima;age=28=;') == {'name': 'Dima', 'age': '28='}
-#     assert parse_cookie('name==Dima;age=28;') == {'name': '=Dima', 'age': '28'}
-#     assert parse_cookie('name=;age=28;') == {'age': '28'}
-#     assert parse_cookie('name=;;;;age=28;') == {'name': ';;;', 'age': '28'}
-#     assert parse_cookie('name=age=28;age=') == {'name': 'age=28'}
-#     assert parse_cookie('name=age=28;age=') == {'name': 'age=28'}
-#     assert parse_cookie('name=;age=') == {}
-#     assert parse_cookie('name=Di=ma;age=') == {'name': 'Di=ma'}
-#     assert parse_cookie('name=name;age=age') == {'name': 'name', 'age': 'age'}
-#     assert parse_cookie('name=;;;;age=;;;') == {'name': ';;;', 'age': ';;'}
-#     assert parse_cookie('name=;=;age=;=;') == {'name': ';=', 'age': ';='}
+def parse_cookie(query: str) -> dict:
+    cookie = {}
+    if not ";" in query and "=" in query:
+        cookie[f'{query.split("=", 1)}'] = query.split("=", 1)[1]
+    elif ";" in query and "=" in query:
+        for i in query.split(";"):
+            if i and "=" in i:
+                if i.split("=", 1)[1] and i.split("=", 1)[0]:
+                    cookie[i.split("=", 1)[0]] = i.split("=", 1)[1]
+    return cookie
+
+
+if __name__ == '__main__':
+    assert parse_cookie('name=Dima;') == {'name': 'Dima'}
+    assert parse_cookie('') == {}
+    assert parse_cookie('name=Dima;age=28;') == {'name': 'Dima', 'age': '28'}
+    assert parse_cookie('name=Dima=User;age=28;') == {'name': 'Dima=User', 'age': '28'}
+    assert parse_cookie('name=Dima;age=28=;') == {'name': 'Dima', 'age': '28='}
+    assert parse_cookie('name==Dima;age=28;') == {'name': '=Dima', 'age': '28'}
+    assert parse_cookie('name=Dima;age=28;gender=male') == {'name': 'Dima',
+                                                            'age': '28',
+                                                            'gender': 'male'}
+    assert parse_cookie('name=Dima;age=28;gender=male;profession=programmer') == {'name': 'Dima',
+                                                            'age': '28',
+                                                            'gender': 'male',
+                                                            'profession': 'programmer'}
+    assert parse_cookie('name=;age=28;') == {'age': '28'}
+    assert parse_cookie('name=age=28;age=') == {'name': 'age=28'}
+    assert parse_cookie('name=age=28;age=') == {'name': 'age=28'}
+    assert parse_cookie('name=;age=') == {}
+    assert parse_cookie('name=Di=ma;age=') == {'name': 'Di=ma'}
+    assert parse_cookie('name=name;age=age') == {'name': 'name', 'age': 'age'}
+    assert parse_cookie('name=name;age=age;=name') == {'name': 'name', 'age': 'age'}
+
